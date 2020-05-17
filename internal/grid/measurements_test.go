@@ -3,7 +3,7 @@ package grid
 import "testing"
 
 func assertDimensions(t *testing.T, grid Grid, instructions DrawingInstructions, expectedWidth, expectedHeight int) {
-	width, height := CalculateDimensions(grid, instructions)
+	width, height := CalculateDimensions(&grid, instructions)
 	if expectedWidth != width {
 		t.Errorf("Expecting width %d but got %d", expectedWidth, width)
 	}
@@ -19,8 +19,8 @@ func TestCalculatingDimensions(t *testing.T) {
 			height: 1,
 		},
 		DrawingInstructions{
-			nodeSize: 10,
-			margin:   1,
+			NodeSize: 10,
+			Margin:   1,
 		},
 		12,
 		12,
@@ -31,8 +31,8 @@ func TestCalculatingDimensions(t *testing.T) {
 			height: 10,
 		},
 		DrawingInstructions{
-			nodeSize: 10,
-			margin:   10,
+			NodeSize: 10,
+			Margin:   10,
 		},
 		210,
 		210,
@@ -43,8 +43,8 @@ func TestCalculatingDimensions(t *testing.T) {
 			height: 1,
 		},
 		DrawingInstructions{
-			nodeSize: 10,
-			margin:   5,
+			NodeSize: 10,
+			Margin:   5,
 		},
 		35,
 		20,

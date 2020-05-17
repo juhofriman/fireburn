@@ -1,8 +1,16 @@
 package grid
 
+import "github.com/fogleman/gg"
+
+// DrawingInstructions which defines nodeSize and general Grid margin in pixels
+type DrawingInstructions struct {
+	NodeSize, Margin int
+	DesignMode       bool
+}
+
 // Node represents a single node in Grid
 type Node struct {
-	x, y int
+	X, Y int
 }
 
 // Grid is the main container for diagrams. Grids can be nested and they also retain pointers
@@ -36,10 +44,23 @@ func (g *Grid) Group(placement Node, width, height int, color string) *Grid {
 	subGrid := NewGrid(width, height, color)
 	subGrid.placement = placement
 	subGrid.parent = g
+	g.children = append(g.children, subGrid)
 	return subGrid
 }
 
 // PlaceIcon places Icon into Grid
 func (g *Grid) PlaceIcon(icon Icon) {
 	g.icons = append(g.icons, &icon)
+}
+
+// DrawGrid grid draws grid
+func DrawGrid(grid *Grid, drawingInstructions DrawingInstructions) *gg.Context {
+
+	width, height := CalculateDimensions(grid, drawingInstructions)
+
+	context := gg.NewContext(width, height)
+
+	drawFromRoot(context, grid, drawingInstructions)
+
+	return context
 }
