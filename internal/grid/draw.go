@@ -3,6 +3,7 @@ package grid
 import (
 	"fmt"
 
+	"github.com/disintegration/imaging"
 	"github.com/fogleman/gg"
 )
 
@@ -61,6 +62,23 @@ func drawDesignHelpers(context *gg.Context, grid *Grid, drawingInstructions Draw
 	}
 }
 
+func drawIcons(context *gg.Context, grid *Grid, drawingInstructions DrawingInstructions, drawContext drawingContext) {
+	for _, icon := range grid.icons {
+		if im, err := gg.LoadImage(icon.Src); err == nil {
+			fmt.Println("Drawing icon")
+			resizedImage := imaging.Resize(im, drawingInstructions.NodeSize, drawingInstructions.NodeSize, imaging.Lanczos)
+			x, y := getNodePosition(icon.Placement, grid, drawingInstructions, drawContext)
+			context.DrawImageAnchored(resizedImage, x, y, 0.5, 0.5)
+			if icon.Label != "" {
+				context.SetHexColor(icon.LabelColor)
+				context.DrawStringAnchored(icon.Label, float64(x), float64(y+drawingInstructions.NodeSize/2), 0.5, 1.5)
+			}
+		} else {
+			fmt.Println(err)
+		}
+	}
+}
+
 func draw(context *gg.Context, grid *Grid, drawingInstructions DrawingInstructions, drawContext drawingContext) {
 	fmt.Printf("Drawing: %v\n", grid)
 	context.SetHexColor(grid.color)
@@ -72,12 +90,14 @@ func draw(context *gg.Context, grid *Grid, drawingInstructions DrawingInstructio
 			float64(drawContext.relativeY-drawingInstructions.Margin),
 			float64(grid.width*drawingInstructions.NodeSize+grid.width*drawingInstructions.Margin+drawingInstructions.Margin),
 			float64(grid.height*drawingInstructions.NodeSize+grid.height*drawingInstructions.Margin+drawingInstructions.Margin),
-			20,
+			float64(grid.roundness),
 		)
 		context.Fill()
 	}
 
 	drawDesignHelpers(context, grid, drawingInstructions, drawContext)
+
+	drawIcons(context, grid, drawingInstructions, drawContext)
 
 	for _, child := range grid.children {
 		draw(context, child, drawingInstructions, drawingContext{

@@ -18,7 +18,9 @@ type Node struct {
 type Grid struct {
 	width  int
 	height int
-	color  string
+
+	color     string
+	roundness int
 
 	parent   *Grid
 	children []*Grid
@@ -30,18 +32,19 @@ type Grid struct {
 
 // NewGrid creates new Grid and returns pointer.
 // This creates new root grid and leaves parent reference to nil.
-func NewGrid(width, height int, color string) *Grid {
+func NewGrid(width, height int, color string, roundness int) *Grid {
 	return &Grid{
 		width:     width,
 		height:    height,
 		color:     color,
+		roundness: roundness,
 		placement: Node{0, 0},
 	}
 }
 
 // Group adds new group no grid and returns pointer to created grid
-func (g *Grid) Group(placement Node, width, height int, color string) *Grid {
-	subGrid := NewGrid(width, height, color)
+func (g *Grid) Group(placement Node, width, height int, color string, roundness int) *Grid {
+	subGrid := NewGrid(width, height, color, roundness)
 	subGrid.placement = placement
 	subGrid.parent = g
 	g.children = append(g.children, subGrid)

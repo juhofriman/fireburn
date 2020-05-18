@@ -1,0 +1,7 @@
+grid:
+    nodes: 10x10
+    color: "#ececec"
+    roundness: 0
+output:
+    node_size: 100
+    margin: 10
