@@ -17,6 +17,7 @@ type FireburnYAMLSpecification struct {
 		NodeSize int `yaml:"node_size"`
 		Margin   int
 	}
+	Color map[string]string
 }
 
 func ReadFireburnFile(path string) FireburnYAMLSpecification {

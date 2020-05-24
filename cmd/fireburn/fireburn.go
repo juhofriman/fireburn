@@ -57,14 +57,15 @@ GRID_SIZE must be suplied in form 10x5, which equals 10 wide and 5 nodes tall gr
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			spec := yamlspec.ReadFireburnFile(args[0])
-
+			fmt.Printf("%v\n", spec.Color)
 			width, height := parseDimensions(spec.Grid.Nodes)
 			rootGrid := grid.NewGrid(width, height, spec.Grid.Color, spec.Grid.Roundness)
 
 			context := grid.DrawGrid(rootGrid, grid.DrawingInstructions{
-				NodeSize:   spec.Output.NodeSize,
-				Margin:     spec.Output.Margin,
-				DesignMode: designMode,
+				NodeSize:      spec.Output.NodeSize,
+				Margin:        spec.Output.Margin,
+				DesignMode:    designMode,
+				ColorMappings: spec.Color,
 			})
 
 			context.SavePNG("out.png")

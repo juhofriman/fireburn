@@ -6,6 +6,7 @@ import "github.com/fogleman/gg"
 type DrawingInstructions struct {
 	NodeSize, Margin int
 	DesignMode       bool
+	ColorMappings    map[string]string
 }
 
 // Node represents a single node in Grid
@@ -19,7 +20,7 @@ type Grid struct {
 	width  int
 	height int
 
-	color     string
+	color     Color
 	roundness int
 
 	parent   *Grid
@@ -36,7 +37,7 @@ func NewGrid(width, height int, color string, roundness int) *Grid {
 	return &Grid{
 		width:     width,
 		height:    height,
-		color:     color,
+		color:     Color{color},
 		roundness: roundness,
 		placement: Node{0, 0},
 	}

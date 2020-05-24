@@ -1,6 +1,8 @@
+color:
+    GREY: "#ececec"
 grid:
     nodes: 10x10
-    color: "#ececec"
+    color: GREY
     roundness: 0
 output:
     node_size: 100

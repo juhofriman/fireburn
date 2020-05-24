@@ -1,0 +1,10 @@
+color:
+  BLACK: "#000000"
+grid:
+  nodes: 10x10
+  color: BLACK
+  roundness: 0
+output:
+  node_size: 50
+  margin: 4
+

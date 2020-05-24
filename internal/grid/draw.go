@@ -81,7 +81,7 @@ func drawIcons(context *gg.Context, grid *Grid, drawingInstructions DrawingInstr
 
 func draw(context *gg.Context, grid *Grid, drawingInstructions DrawingInstructions, drawContext drawingContext) {
 	fmt.Printf("Drawing: %v\n", grid)
-	context.SetHexColor(grid.color)
+	context.SetHexColor(ResolveColor(drawingInstructions.ColorMappings, grid.color))
 	if grid.parent == nil {
 		context.Clear()
 	} else {
