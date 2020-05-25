@@ -11,6 +11,7 @@ import (
 )
 
 func parseDimensions(dim string) (int, int) {
+	fmt.Printf("parsing %s\n", dim)
 	dimensions := strings.SplitN(dim, "x", 2)
 	var width, height = 0, 0
 	width, err := strconv.Atoi(dimensions[0])
@@ -24,6 +25,15 @@ func parseDimensions(dim string) (int, int) {
 	return width, height
 }
 
+func createChildren(parent *grid.Grid, container *yamlspec.Container) *grid.Grid {
+	for _, child := range container.Children {
+		width, height := parseDimensions(child.Nodes)
+		group := parent.Group(grid.NodeOf(child.Placement), width, height, child.Color, child.Roundness)
+		createChildren(group, &child)
+	}
+	return parent
+}
+
 func main() {
 
 	var cmdScaffolf = &cobra.Command{
@@ -35,9 +45,9 @@ GRID_SIZE must be suplied in form 10x5, which equals 10 wide and 5 nodes tall gr
 		Run: func(cmd *cobra.Command, args []string) {
 			spec := yamlspec.FireburnYAMLSpecification{}
 
-			spec.Grid.Nodes = args[0]
-			spec.Grid.Color = "#fefefe"
-			spec.Grid.Roundness = 0
+			spec.Root.Nodes = args[0]
+			spec.Root.Color = "#fefefe"
+			spec.Root.Roundness = 0
 
 			spec.Output.NodeSize = 50
 			spec.Output.Margin = 10
@@ -57,9 +67,11 @@ GRID_SIZE must be suplied in form 10x5, which equals 10 wide and 5 nodes tall gr
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			spec := yamlspec.ReadFireburnFile(args[0])
-			fmt.Printf("%v\n", spec.Color)
-			width, height := parseDimensions(spec.Grid.Nodes)
-			rootGrid := grid.NewGrid(width, height, spec.Grid.Color, spec.Grid.Roundness)
+			fmt.Printf("%v\n", spec)
+			width, height := parseDimensions(spec.Root.Nodes)
+			rootGrid := grid.NewGrid(width, height, spec.Root.Color, spec.Root.Roundness)
+
+			createChildren(rootGrid, &spec.Root)
 
 			context := grid.DrawGrid(rootGrid, grid.DrawingInstructions{
 				NodeSize:      spec.Output.NodeSize,

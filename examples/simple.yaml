@@ -1,9 +1,35 @@
 color:
     GREY: "#ececec"
-grid:
+    LIME: "#53e686"
+    RED: "#e8464e"
+    BLUE: "#466ee8"
+    YELLOW: "#f7f445"
+root:
     nodes: 10x10
     color: GREY
     roundness: 0
+    children:
+        -
+            nodes: 4x4
+            color: LIME
+            roundness: 50
+            placement: 5,5            
+        -
+            nodes: 4x4
+            color: RED
+            roundness: 50
+            placement: 4,4
+        -
+            nodes: 4x4
+            color: BLUE
+            roundness: 50
+            placement: 3,3     
+            children: 
+                -
+                    nodes: 2x2
+                    color: YELLOW
+                    roundness: 40
+                    placement: 1,1       
 output:
     node_size: 100
-    margin: 10
+    margin: 1

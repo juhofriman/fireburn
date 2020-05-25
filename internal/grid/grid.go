@@ -1,6 +1,11 @@
 package grid
 
-import "github.com/fogleman/gg"
+import (
+	"strconv"
+	"strings"
+
+	"github.com/fogleman/gg"
+)
 
 // DrawingInstructions which defines nodeSize and general Grid margin in pixels
 type DrawingInstructions struct {
@@ -12,6 +17,19 @@ type DrawingInstructions struct {
 // Node represents a single node in Grid
 type Node struct {
 	X, Y int
+}
+
+func NodeOf(str string) Node {
+	values := strings.SplitN(str, ",", 2)
+	x, err := strconv.Atoi(values[0])
+	if err != nil {
+		panic("Aaargh")
+	}
+	y, err := strconv.Atoi(values[1])
+	if err != nil {
+		panic("Aaargh")
+	}
+	return Node{x, y}
 }
 
 // Grid is the main container for diagrams. Grids can be nested and they also retain pointers
